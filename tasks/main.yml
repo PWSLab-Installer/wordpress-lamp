@@ -41,6 +41,11 @@
   notify: Reload Apache
   tags: [ apache ]
 
+- name: Enable rewrite module
+  shell: /usr/sbin/a2enmod php7.2
+  notify: Restart Apache
+  tags: [ apache ]
+
 - name: Enable new site
   shell: /usr/sbin/a2ensite {{ http_conf }}
   notify: Reload Apache

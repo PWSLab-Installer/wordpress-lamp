@@ -10,7 +10,7 @@
     - name: Fetch WordPress Lamp Role
       git:
         repo: https://ro:HyyKcQAjnC28WdDiXEta@pwslab.org/ansible/wordpress-lamp.git
-        dest: /root/.ansible/roles/wlamp
+        dest: /root/.ansible/roles/pwslab.wlamp
         version: master
         force: yes
 
@@ -41,8 +41,8 @@
     #   when:
     #     - ubuntu_os.stdout | regex_search("20.04")
 
-    - name: Installing LEMP WORDPRESS
+    - name: Installing LAMP WORDPRESS
       include_role:
-        name: wlemp
+        name: pwslab.wlamp
       when:
         - not apache_exists.stat.exists and not php_exists.stat.exists and not mysql_exists.stat.exists

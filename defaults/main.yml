@@ -1,6 +1,6 @@
 ---
 #System Settings
-php_modules: [ 'php-curl', 'php-gd', 'php-mbstring', 'php-xml', 'php-xmlrpc', 'php-soap', 'php-intl', 'php-zip' ]
+php_modules: [ 'php-curl', 'php-gd', 'php-mbstring', 'php-xml', 'php-xmlrpc', 'php-soap', 'php-intl', 'php-zip', 'libapache2-mod-php' ]
 
 #MySQL Settings
 mysql_root_password: "mysql_root_password"
@@ -9,6 +9,6 @@ mysql_user: "pwslab"
 mysql_password: "pwslab"
 
 #HTTP Settings
-http_host: "your_domain"
+http_host: "localhost"
 http_conf: "your_domain.conf"
 http_port: "80"
