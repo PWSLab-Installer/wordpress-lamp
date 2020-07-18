@@ -4,14 +4,14 @@
 ---
 - name: Install prerequisites
   become: true
-  apt: name=aptitude update_cache=yes state=latest force_apt_get=yes
+  apt: name=aptitude update_cache=yes state=present force_apt_get=yes
   tags: [ system ]
   when:
     - ubuntu_os.stdout | regex_search("Ubuntu")
 
 - name: Install LAMP Packages
   become: true
-  apt: name={{ item }} update_cache=yes state=latest
+  apt: name={{ item }} update_cache=yes state=present
   loop: [ 'apache2', 'mysql-server', 'python3-pymysql', 'php-fpm', 'php-mysql' ]
   tags: [ system ]
   when:
@@ -19,7 +19,7 @@
 
 - name: Install PHP Extensions
   become: true
-  apt: name={{ item }} update_cache=yes state=latest
+  apt: name={{ item }} update_cache=yes state=present
   loop: "{{ php_modules }}"
   tags: [ system ]
   when:
@@ -93,6 +93,44 @@
   when:
     - ubuntu_os.stdout | regex_search("Ubuntu")
 
+###################################################### CENTOS #####################################################
+- name: Install LAMP Packages
+  become: true
+  yum: name={{ item }} state=present
+  loop: [ 'php-mysqlnd', 'php-json' ]
+  tags: [ system ]
+  when:
+    - cent_os.stdout | regex_search("CentOS")
+
+
+- name: Set up Apache VirtualHost
+  template:
+    src: "apache.conf.j2"
+    dest: "/etc/httpd/conf.d/{{ http_conf }}"
+  # notify: Reload Apache
+  tags: [ apache ]
+  when:
+    - cent_os.stdout | regex_search("CentOS")
+
+- name: Remove file (delete file)
+  file:
+    path: /etc/httpd/conf.d/vhosts.conf
+    state: absent
+  notify: Restart HTTPD
+  when:
+    - cent_os.stdout | regex_search("CentOS")
+
+- name: Remove file (delete file)
+  file:
+    path: /etc/httpd/conf.d/welcome.conf
+    state: absent
+  notify: Restart HTTPD
+  when:
+    - cent_os.stdout | regex_search("CentOS")
+
+
+
+###################################################################################################################
 
 # MySQL Configuration
 # - name: Ensure no user named 'sally' exists at all
