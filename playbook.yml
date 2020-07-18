@@ -1,9 +1,13 @@
 - hosts: localhost
   connection: local
 
-  # vars:
-  #   pip_install_packages:
-  #     - php_version: docker
+  vars:
+    php_version: '7.2'
+    php_default_version_debian: '7.2'
+    php_webserver_daemon: "apache"
+    php_packages_state: latest
+    mysql_databases: 
+      - name: wordpress
 
   tasks:
       
@@ -107,7 +111,20 @@
     - name: Installing PHP
       include_role:
           name: pwslab.php
-      when: not php_exists.stat.exists
+      when: 
+        - not php_exists.stat.exists
+        - ubuntu_os.stdout | regex_search("Ubuntu")
+      vars:
+        php_webserver_daemon: "apache2"
+
+    - name: Installing PHP
+      include_role:
+          name: pwslab.php
+      when: 
+        - not php_exists.stat.exists
+        - cent_os.stdout | regex_search("CentOS")
+      vars:
+        php_webserver_daemon: "httpd"
 
     # - name: Update php Version 
     #   lineinfile:

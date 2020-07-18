@@ -2,22 +2,28 @@
 # DO Community Playbooks: Wordpress on Ubuntu 18.04 LAMP
 #########################################################
 ---
-# - name: Install prerequisites
-#   become: true
-#   apt: name=aptitude update_cache=yes state=latest force_apt_get=yes
-#   tags: [ system ]
+- name: Install prerequisites
+  become: true
+  apt: name=aptitude update_cache=yes state=latest force_apt_get=yes
+  tags: [ system ]
+  when:
+    - ubuntu_os.stdout | regex_search("Ubuntu")
 
-# - name: Install LAMP Packages
-#   become: true
-#   apt: name={{ item }} update_cache=yes state=latest
-#   loop: [ 'apache2', 'mysql-server', 'python3-pymysql', 'php-fpm', 'php-mysql' ]
-#   tags: [ system ]
+- name: Install LAMP Packages
+  become: true
+  apt: name={{ item }} update_cache=yes state=latest
+  loop: [ 'apache2', 'mysql-server', 'python3-pymysql', 'php-fpm', 'php-mysql' ]
+  tags: [ system ]
+  when:
+    - ubuntu_os.stdout | regex_search("Ubuntu")
 
-# - name: Install PHP Extensions
-#   become: true
-#   apt: name={{ item }} update_cache=yes state=latest
-#   loop: "{{ php_modules }}"
-#   tags: [ system ]
+- name: Install PHP Extensions
+  become: true
+  apt: name={{ item }} update_cache=yes state=latest
+  loop: "{{ php_modules }}"
+  tags: [ system ]
+  when:
+    - ubuntu_os.stdout | regex_search("Ubuntu")
 
 # Apache Configuration
 - name: Create document root
@@ -49,25 +55,33 @@
   # notify: Reload Apache
   tags: [ apache ]
 
-# - name: Enable rewrite module
-#   shell: /usr/sbin/a2enmod rewrite
-#   notify: Reload Apache
-#   tags: [ apache ]
+- name: Enable rewrite module
+  shell: /usr/sbin/a2enmod rewrite
+  notify: Reload Apache
+  tags: [ apache ]
+  when:
+    - ubuntu_os.stdout | regex_search("Ubuntu")
 
-# - name: Enable rewrite module
-#   shell: /usr/sbin/a2enmod php7.2
-#   notify: Restart Apache
-#   tags: [ apache ]
+- name: Enable rewrite module
+  shell: /usr/sbin/a2enmod php7.2
+  notify: Restart Apache
+  tags: [ apache ]
+  when:
+    - ubuntu_os.stdout | regex_search("Ubuntu")
 
-# - name: Enable new site
-#   shell: /usr/sbin/a2ensite {{ http_conf }}
-#   notify: Reload Apache
-#   tags: [ apache ]
+- name: Enable new site
+  shell: /usr/sbin/a2ensite {{ http_conf }}
+  notify: Reload Apache
+  tags: [ apache ]
+  when:
+    - ubuntu_os.stdout | regex_search("Ubuntu")
 
-# - name: Disable default Apache site
-#   shell: /usr/sbin/a2dissite 000-default.conf
-#   notify: Restart Apache
-#   tags: [ apache ]
+- name: Disable default Apache site
+  shell: /usr/sbin/a2dissite 000-default.conf
+  notify: Restart Apache
+  tags: [ apache ]
+  when:
+    - ubuntu_os.stdout | regex_search("Ubuntu")
 
 # MySQL Configuration
 # - name: Ensure no user named 'sally' exists at all
