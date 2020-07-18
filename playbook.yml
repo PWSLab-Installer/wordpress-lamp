@@ -4,7 +4,7 @@
   vars:
     php_version: '7.2'
     php_default_version_debian: '7.2'
-    php_webserver_daemon: "apache"
+    php_webserver_daemon: "apache2"
     php_packages_state: latest
     mysql_databases: 
       - name: wordpress
@@ -23,6 +23,9 @@
 
     - name: Install Role MYSQL
       local_action: command ansible-galaxy install -f geerlingguy.mysql
+
+    - name: Install Role REMI
+      local_action: command ansible-galaxy install -f geerlingguy.repo-remi 
 
     - name: Install Role PHP
       local_action: command ansible-galaxy install -f geerlingguy.php
@@ -51,7 +54,12 @@
       command: mv ~/.ansible/roles/geerlingguy.php ~/.ansible/roles/pwslab.php
       when: not php_exists.stat.exists
       ignore_errors: yes
-
+    
+    - name: Applying role REMI
+      command: mv ~/.ansible/roles/geerlingguy.repo-remi  ~/.ansible/roles/pwslab.repo-remi 
+      when: not php_exists.stat.exists
+      ignore_errors: yes
+    
     - name: Applying role PHP-Versions
       command: mv ~/.ansible/roles/geerlingguy.php-versions ~/.ansible/roles/pwslab.php-versions
       when: not php_exists.stat.exists
@@ -100,6 +108,11 @@
       include_role:
           name: pwslab.mysql
       when: not mysql_exists.stat.exists
+
+    - name: Installing Remi
+      include_role:
+          name: pwslab.repo-remi 
+      when: cent_os.stdout | regex_search("CentOS")
 
     - name: Installing PHP-Versions
       include_role:

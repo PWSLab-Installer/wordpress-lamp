@@ -102,6 +102,13 @@
   when:
     - cent_os.stdout | regex_search("CentOS")
 
+- name: Create Wordpress log directory
+  file:
+    path: /var/log/wordpress
+    state: directory
+    mode: '0755'
+  when:
+    - cent_os.stdout | regex_search("CentOS")
 
 - name: Set up Apache VirtualHost
   template:
