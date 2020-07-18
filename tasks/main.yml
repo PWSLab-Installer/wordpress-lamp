@@ -54,6 +54,8 @@
     dest: "/etc/apache2/sites-available/{{ http_conf }}"
   # notify: Reload Apache
   tags: [ apache ]
+  when:
+    - ubuntu_os.stdout | regex_search("Ubuntu")
 
 - name: Enable rewrite module
   shell: /usr/sbin/a2enmod rewrite
@@ -90,6 +92,7 @@
   notify: Restart Apache
   when:
     - ubuntu_os.stdout | regex_search("Ubuntu")
+
 
 # MySQL Configuration
 # - name: Ensure no user named 'sally' exists at all
