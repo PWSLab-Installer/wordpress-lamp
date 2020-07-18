@@ -112,8 +112,8 @@
     path: /var/log/wordpress
     state: directory
     mode: '0755'
-  when:
-    - cent_os.stdout | regex_search("CentOS")
+  # when:
+  #   - cent_os.stdout | regex_search("CentOS")
 
 - name: Set up Apache VirtualHost
   template:
