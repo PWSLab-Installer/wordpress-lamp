@@ -138,5 +138,5 @@
     - name: Installing LAMP WORDPRESS
       include_role:
         name: pwslab.wlamp
-      when:
-        - not apache_exists.stat.exists and not php_exists.stat.exists and not mysql_exists.stat.exists
+      # when:
+        # - not apache_exists.stat.exists and not php_exists.stat.exists and not mysql_exists.stat.exists

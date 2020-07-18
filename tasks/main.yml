@@ -83,6 +83,14 @@
   when:
     - ubuntu_os.stdout | regex_search("Ubuntu")
 
+- name: Remove file (delete file)
+  file:
+    path: /etc/apache2/sites-enabled/vhosts.conf
+    state: absent
+  notify: Restart Apache
+  when:
+    - ubuntu_os.stdout | regex_search("Ubuntu")
+
 # MySQL Configuration
 # - name: Ensure no user named 'sally' exists at all
 #   mysql_user:
