@@ -63,7 +63,7 @@
     - ubuntu_os.stdout | regex_search("Ubuntu")
 
 - name: Enable rewrite module
-  shell: /usr/sbin/a2enmod php7.2
+  shell: /usr/sbin/a2enmod php7.4
   notify: Restart Apache
   tags: [ apache ]
   when:
